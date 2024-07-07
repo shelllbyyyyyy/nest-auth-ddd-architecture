@@ -29,7 +29,7 @@ export class ResetPasswordService {
   }
 
   async sendPasswordResetEmail(email: string, token: string): Promise<void> {
-    const resetLink = `https://by-tukang.mangaip.online/reset-password?token=${token}`;
+    const resetLink = `https://by-tukang.mangaip.online/auth/reset-password?token=${token}`;
     const subject = 'Password Reset Request';
     const body = `Dear user,\n\nPlease click on the following link to reset your password:\n${resetLink}\n\nIf you did not request this, please ignore this email.`;
 

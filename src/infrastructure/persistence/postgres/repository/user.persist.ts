@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 
 import { User } from '@/domain/models/user.entity';
 import { UserRepository } from '@/domain/repositories/user.repository';
@@ -29,6 +29,10 @@ export class UserPersist implements UserRepository {
     const query = 'SELECT * FROM users';
 
     const result = await this.db.query(query, []);
+
+    if (result.length == 0) {
+      throw new UnprocessableEntityException('User not found');
+    }
 
     return UserMapper.toDomains(result);
   }
@@ -62,7 +66,7 @@ export class UserPersist implements UserRepository {
     const query = `UPDATE users SET password = $1, "updatedAt" = $2 WHERE email = $3;`;
     const result = await this.db.query(query, [password, updatedAt, email]);
 
-    return UserMapper.toDomain(result);
+    return UserMapper.toDomain(result[0]);
   }
 
   async verifiedUser(data: User): Promise<boolean> {

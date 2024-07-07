@@ -48,12 +48,20 @@ export class AuthPersist {
     return user;
   }
 
-  async register(name: string, email: string, password: string): Promise<User> {
+  async register(
+    name: string,
+    email: string,
+    password: string,
+    retryPassword: string,
+  ): Promise<User> {
     const user = await this.userPersist.findByEmail(email);
     if (user)
       throw new UnprocessableEntityException(
         'email has already been registered',
       );
+
+    if (retryPassword !== password)
+      throw new UnprocessableEntityException('Password not match');
 
     const id = uuidv4();
     const hashedPassword = await this.bcryptService.hashPassword(password);

@@ -17,6 +17,7 @@ import { AuthPersist } from '@/infrastructure/persistence/auth/repository/auth.p
 import { LoginDTO } from '../dtos/login.dto';
 import { RegisterDTO } from '../dtos/register.dto';
 import { ApiResponse } from '../dtos/api-response.dto';
+import { ResetPasswordDTO } from '../dtos/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -36,8 +37,13 @@ export class AuthController {
 
   @Post('/register')
   async register(@Body() registerDTO: RegisterDTO): Promise<ApiResponse<User>> {
-    const { name, email, password } = registerDTO;
-    const newUser = await this.authService.register(name, email, password);
+    const { name, email, password, retryPassword } = registerDTO;
+    const newUser = await this.authService.register(
+      name,
+      email,
+      password,
+      retryPassword,
+    );
 
     return new ApiResponse(HttpStatus.CREATED, 'Register successful', newUser);
   }
@@ -57,10 +63,13 @@ export class AuthController {
 
   @Post('/reset-password/:token')
   async resetPassword(
-    @Body() newPassword: string,
+    @Body() resetPasswordDTO: ResetPasswordDTO,
     @Param('token') token: string,
   ): Promise<ApiResponse<User>> {
-    const data = await this.userService.updatePassword(newPassword, token);
+    const data = await this.userService.updatePassword(
+      resetPasswordDTO.password,
+      token,
+    );
 
     return new ApiResponse(
       HttpStatus.OK,

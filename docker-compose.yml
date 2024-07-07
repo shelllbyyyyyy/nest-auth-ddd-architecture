@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: database-tes
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database-tes
+    volumes:
+      - data_postgres:/var/lib/postgresql/data
+    networks:
+      - default
+
+volumes:
+  data_postgres:

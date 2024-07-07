@@ -12,7 +12,7 @@ export class DatabaseService {
       const result: QueryResult<any> = await client.query(text, params);
 
       if (result.rows.length === 0) {
-        return null;
+        return [];
       }
 
       return result.rows;

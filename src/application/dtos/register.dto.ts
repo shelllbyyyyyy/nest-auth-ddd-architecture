@@ -15,4 +15,9 @@ export class RegisterDTO {
   @IsNotEmpty()
   @MinLength(8)
   readonly password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
+  readonly retryPassword: string;
 }
